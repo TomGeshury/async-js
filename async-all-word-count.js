@@ -1,18 +1,4 @@
 /*        
-   ----- unnecessary background story -----    
-
-Your grade school Math teacher visited you at Hack Reactor, expecting
-you to do an old assignment to see if you're still a smart cookie. 
-In fact, your teacher expects you to do this every week to make sure 
-you keep practiced! How frustrating! 
-
-The assignment: Count the number of distinct words in a paragraph and 
-submit it to her. 
-
-However, you now have the power of code to do it within an instant and
-can do it in a fraction of a second without her knowing :) 
-
------ end of unnecessary background story ----- 
 
 Write a function that reads an input file and outputs a .txt file 
 containing the word count of every word in your input.txt. 
@@ -65,6 +51,46 @@ const countWords = function(paragraph) {
 // outputFile: path to write resulting txt file to
 // EXAMPLE USAGE
 // countAllWords('./input.txt', './output.txt') --> should output a .txt file in same directory
+
+var objCounter = {};
+var arrayConverter = (string, callback) => {
+  var atoO = string.split(" ");
+  for(var i = 0; i < atoO.length; i++){
+    if(!objCounter[atoO[i]]){
+      objCounter[atoO[i]] = 1;
+    }
+    else {
+      objCounter[atoO[i]] =  objCounter[atoO[i]] + 1
+    }
+  }
+  callback()
+}
+
 var countAllWords = function(inputFile, outputFile) {
+  
+  var body = ""
+  var arr = [];
+  fs.readFile(inputFile, (err, data)=> {
+    if (err) throw err
+    body += data
+    arrayConverter(body, () => {
+          var finalString = ""
+          for(var i in objCounter){
+            finalString += `${i} ${objCounter[i]}\n` 
+          }
+
+          fs.writeFile(outputFile, finalString, (err) => {
+          console.log(objCounter);
+          if (err) throw err
+        })
+    });
+    
+   
+  })
   /* WRITE CODE HERE */ 
 }
+
+
+
+
+countAllWords("/Users/mrmac/Shihao/async-js/input.txt","/Users/mrmac/Shihao/async-js/exampleOutput/sample.txt")
